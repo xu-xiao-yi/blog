@@ -1,14 +1,11 @@
 package com.scs.web.blog.service;
 
-import com.scs.web.blog.dao.UserDao;
-import com.scs.web.blog.domain.UserDto;
+import com.scs.web.blog.domain.dto.UserDto;
 import com.scs.web.blog.factory.ServiceFactory;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.junit.Assert.*;
 
 public class UserServiceTest {
     private UserService userService = ServiceFactory.getUserServiceInstance();

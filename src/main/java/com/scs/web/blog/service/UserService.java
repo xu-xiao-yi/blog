@@ -1,8 +1,9 @@
 package com.scs.web.blog.service;
 
-import com.scs.web.blog.domain.UserDto;
+import com.scs.web.blog.domain.dto.UserDto;
 import com.scs.web.blog.entity.User;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,4 +21,10 @@ public interface UserService {
      * @return
      */
     Map<String, Object> signIn(UserDto userDto);
+
+    /**
+     * 分页获取用户信息
+     * @return
+     */
+    List<User> getUsers();
 }

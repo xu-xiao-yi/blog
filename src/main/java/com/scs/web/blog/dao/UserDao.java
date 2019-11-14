@@ -37,4 +37,11 @@ public interface UserDao {
      * @throws SQLException
      */
     User findUserByMobile(String mobile) throws SQLException;
+
+    /**
+     * 查询热门用户
+     * @return
+     * @throws SQLException
+     */
+    List<User> selectHotUsers()throws SQLException;
 }

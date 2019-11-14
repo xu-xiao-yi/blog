@@ -2,11 +2,11 @@ package com.scs.web.blog.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.scs.web.blog.dao.UserDao;
-import com.scs.web.blog.domain.UserDto;
+import com.scs.web.blog.domain.dto.UserDto;
 import com.scs.web.blog.factory.ServiceFactory;
-import com.scs.web.blog.filter.CorsFilter;
 import com.scs.web.blog.service.UserService;
+import com.scs.web.blog.util.DataUtil;
+import com.scs.web.blog.util.JSoupSpider;
 import com.scs.web.blog.util.Message;
 import com.scs.web.blog.util.ResponseObject;
 import org.slf4j.Logger;
@@ -29,7 +29,7 @@ import java.util.Map;
  * @Date 15:56 2019/11/9
  * @Version 1.0
  **/
-@WebServlet(urlPatterns = "/sign-in")
+@WebServlet(urlPatterns = {"/api/sign-in","/api/users"})
 public class UserController extends HttpServlet {
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
     private UserService userService = ServiceFactory.getUserServiceInstance();
@@ -38,7 +38,7 @@ public class UserController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         BufferedReader reader = req.getReader();
         StringBuilder stringBuilder = new StringBuilder();
-        String line = null;
+        String line;
         while ((line = reader.readLine()) != null) {
             stringBuilder.append(line);
         }
@@ -53,6 +53,15 @@ public class UserController extends HttpServlet {
         } else {
             ro = ResponseObject.success(200, msg);
         }
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(ro));
+        out.close();
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Gson gson = new GsonBuilder().create();
+        ResponseObject ro = ResponseObject.success(200,"成功", userService.getUsers());
         PrintWriter out = resp.getWriter();
         out.print(gson.toJson(ro));
         out.close();
