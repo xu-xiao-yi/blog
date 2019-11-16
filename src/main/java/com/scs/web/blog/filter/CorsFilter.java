@@ -16,8 +16,8 @@ import java.io.IOException;
  * @Version 1.0
  **/
 @WebFilter(urlPatterns = "/*")
-public class XorsFilter implements Filter {
-    private static Logger logger = LoggerFactory.getLogger(XorsFilter.class);
+public class CorsFilter implements Filter {
+    private static Logger logger = LoggerFactory.getLogger(CorsFilter.class);
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {

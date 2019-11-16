@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.scs.web.blog.domain.dto.City;
 import com.scs.web.blog.domain.dto.Province;
-import com.scs.web.blog.domain.dto.Provinces;
+import com.scs.web.blog.domain.dto.ProvinceList;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,6 @@ import java.io.*;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -78,6 +77,10 @@ public class DataUtil {
         return now.minusDays(bound);
     }
 
+    /**
+     * 生成地址
+     * @return
+     */
     public static String getAddress() {
         StringBuilder address = new StringBuilder();
         ClassLoader classLoader = DataUtil.class.getClassLoader();
@@ -102,8 +105,8 @@ public class DataUtil {
             logger.error("文件io异常");
         }
         Gson gson = new GsonBuilder().create();
-        Provinces provinces = gson.fromJson(address.toString(), Provinces.class);
-        List<Province> provinceList = provinces.getProvinces();
+        ProvinceList provinces = gson.fromJson(address.toString(), ProvinceList.class);
+        List<Province> provinceList = provinces.getProvinceList();
         int size = provinceList.size();
         Random random = new Random();
         int index = random.nextInt(size);
@@ -115,6 +118,10 @@ public class DataUtil {
         return province.getName() + city.getName();
     }
 
+    /**
+     * 生成时间
+     * @return
+     */
     public static LocalDateTime getCreateTime(){
         LocalDateTime now = LocalDateTime.now();
         Random random = new Random();
@@ -122,6 +129,10 @@ public class DataUtil {
         return now.minusHours(bound);
     }
 
+    /**
+     *
+     * @return
+     */
     public static Long getUserId(){
         Random random = new Random();
         long bound = random.nextInt(61);

@@ -23,6 +23,11 @@ public class User {
     private LocalDate birthday;
     private String address;
     private String introduction;
+    //个人中心背景图
+    private String banner;
+    //邮箱
+    private String email;
+    //主页
     private String homepage;
     private Short follows;
     private Short fans;

@@ -1,10 +1,7 @@
 package com.scs.web.blog.service;
 
 import com.scs.web.blog.domain.dto.UserDto;
-import com.scs.web.blog.entity.User;
-
-import java.util.List;
-import java.util.Map;
+import com.scs.web.blog.util.Result;
 
 /**
  * @author mq_xu
@@ -20,11 +17,24 @@ public interface UserService {
      * @param userDto
      * @return
      */
-    Map<String, Object> signIn(UserDto userDto);
+    Result signIn(UserDto userDto);
 
     /**
-     * 分页获取用户信息
+     * 获取热门用户信息
      * @return
      */
-    List<User> getUsers();
+    Result getHotUsers();
+
+    /**
+     * 获取分页用户信息
+     * @return
+     */
+    Result getPageUsers();
+
+    /**
+     * 根据id查询用户详情数据
+     * @param id
+     * @return
+     */
+    Result getUser(long id);
 }

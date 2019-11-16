@@ -1,6 +1,7 @@
 package com.scs.web.blog.dao.impl;
 
 import com.scs.web.blog.dao.UserDao;
+import com.scs.web.blog.domain.vo.UserVo;
 import com.scs.web.blog.entity.User;
 import com.scs.web.blog.util.DbUtil;
 import org.slf4j.Logger;
@@ -64,22 +65,41 @@ public class UserDaoImpl implements UserDao {
     public User findUserByMobile(String mobile) throws SQLException {
         Connection connection = DbUtil.getConnection();
         String sql = "SELECT * FROM t_user WHERE mobile = ? ";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setString(1, mobile);
-        ResultSet rs = pstmt.executeQuery();
-        return convertUser(rs).get(0);
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setString(1, mobile);
+        ResultSet rs = pst.executeQuery();
+        return convert(rs).get(0);
     }
 
     @Override
     public List<User> selectHotUsers() throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "SELECT * FROM t_user ORDER BY id DESC LIMIT 10 ";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        ResultSet rs = pstmt.executeQuery();
-        return convertUser(rs);
+        String sql = "SELECT * FROM t_user ORDER BY fans DESC LIMIT 10 ";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+        return convert(rs);
     }
 
-    private List<User> convertUser(ResultSet rs) {
+    @Override
+    public List<User> selectPageUsers(int currentPage, int pageCount) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public UserVo getUser(long id) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public int getTotalUser() throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT COUNT(*) FROM t_user ";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+        return rs.getRow();
+    }
+
+    private List<User> convert(ResultSet rs) {
         List<User> userList = new ArrayList<>(50);
         try {
             while (rs.next()) {
@@ -92,6 +112,8 @@ public class UserDaoImpl implements UserDao {
                 user.setGender(rs.getString("gender"));
                 user.setBirthday(rs.getDate("birthday").toLocalDate());
                 user.setIntroduction(rs.getString("introduction"));
+                user.setBanner(rs.getString("banner"));
+                user.setEmail(rs.getString("email"));
                 user.setAddress(rs.getString("address"));
                 user.setFollows(rs.getShort("follows"));
                 user.setFans(rs.getShort("fans"));

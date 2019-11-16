@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author mq_xu
  * @ClassName Province
- * @Description TODO
+ * @Description 省，level为1，
  * @Date 20:46 2019/11/9
  * @Version 1.0
  **/

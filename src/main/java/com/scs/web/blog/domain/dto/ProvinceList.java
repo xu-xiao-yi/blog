@@ -3,16 +3,15 @@ package com.scs.web.blog.domain.dto;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author mq_xu
  * @ClassName provinces
- * @Description TODO
+ * @Description 省份集合，包含了全国所有省市数据
  * @Date 20:49 2019/11/9
  * @Version 1.0
  **/
 @Data
-public class Provinces {
-    private List<Province> provinces;
+public class ProvinceList {
+    private List<Province> provinceList;
 }

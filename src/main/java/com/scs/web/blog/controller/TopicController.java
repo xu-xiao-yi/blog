@@ -3,7 +3,7 @@ package com.scs.web.blog.controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.scs.web.blog.factory.ServiceFactory;
-import com.scs.web.blog.service.ArticleService;
+import com.scs.web.blog.service.TopicService;
 import com.scs.web.blog.util.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,19 +18,18 @@ import java.io.PrintWriter;
 
 /**
  * @author mq_xu
- * @ClassName ArticleController
- * @Description 文章控制器
- * @Date 2019/11/11
+ * @ClassName TopicController
+ * @Description 专题控制器
+ * @Date 2019/11/16
  * @Version 1.0
  **/
-@WebServlet(urlPatterns = {"/api/article/*"})
-public class ArticleController extends HttpServlet {
-
-    private ArticleService articleService = ServiceFactory.getArticleServiceInstance();
-    private static Logger logger = LoggerFactory.getLogger(ArticleController.class);
+@WebServlet(urlPatterns = {"/api/topic/*"})
+public class TopicController extends HttpServlet {
+    private TopicService topicService = ServiceFactory.getTopicServiceInstance();
+    private static Logger logger = LoggerFactory.getLogger(TopicController.class);
 
     private String getPatten(String uri) {
-        int len = "/api/article".length();
+        int len = "/api/topic".length();
         return uri.substring(len);
     }
 
@@ -39,32 +38,29 @@ public class ArticleController extends HttpServlet {
         String patten = getPatten(req.getRequestURI());
         switch (patten) {
             case "/hot":
-                getHotArticles(req, resp);
+                getHotTopics(req, resp);
                 break;
             case "/list?page=*":
-                getPageArticles(req, resp);
+                getPageTopics(req, resp);
                 break;
             case "/*":
-                getArticle(req, resp);
+                getTopic(req, resp);
                 break;
         }
     }
 
-    private void getHotArticles(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void getHotTopics(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Gson gson = new GsonBuilder().create();
-        Result result = articleService.getHotArticles();
+        Result result = topicService.getHotTopics();
         PrintWriter out = resp.getWriter();
         out.print(gson.toJson(result));
         out.close();
     }
 
-    private void getPageArticles(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void getPageTopics(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     }
 
-    private void getArticle(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void getTopic(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    }
 }

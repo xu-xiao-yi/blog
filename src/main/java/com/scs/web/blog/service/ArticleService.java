@@ -1,9 +1,6 @@
 package com.scs.web.blog.service;
 
-import com.scs.web.blog.domain.vo.ArticleVo;
-
-import java.sql.SQLException;
-import java.util.List;
+import com.scs.web.blog.util.Result;
 
 /**
  * @author mq_xu
@@ -15,7 +12,22 @@ import java.util.List;
 public interface ArticleService {
     /**
      * 获取热门文章
+     *
      * @return
      */
-    List<ArticleVo> getHotArticles();
+    Result getHotArticles();
+
+    /**
+     * 获取分页文章
+     *
+     * @return
+     */
+    Result getPageArticles(int currentPage, int pageCount);
+
+    /**
+     * 获取文章详情
+     *
+     * @return
+     */
+    Result getArticle(long id);
 }
