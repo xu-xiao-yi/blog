@@ -28,12 +28,12 @@ public class TopicDaoImpl implements TopicDao {
     public int[] batchInsert(List<Topic> topicList) throws SQLException {
         Connection connection = DbUtil.getConnection();
         connection.setAutoCommit(false);
-        String sql = "INSERT INTO t_topic (admin_id,name,logo,description,articles,follows,create_time) VALUES (?,?,?,?,?,?,?) ";
+        String sql = "INSERT INTO t_topic (admin_id,topic_name,logo,description,articles,follows,create_time) VALUES (?,?,?,?,?,?,?) ";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         topicList.forEach(topic -> {
             try {
                 pstmt.setLong(1, topic.getAdminId());
-                pstmt.setString(2, topic.getName());
+                pstmt.setString(2, topic.getTopicName());
                 pstmt.setString(3, topic.getLogo());
                 pstmt.setString(4, topic.getDescription());
                 pstmt.setInt(5, topic.getArticles());
@@ -56,27 +56,13 @@ public class TopicDaoImpl implements TopicDao {
         String sql = "SELECT * FROM t_topic ORDER BY follows DESC LIMIT 10 ";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
-        return convert(rs);
-    }
-
-    @Override
-    public List<Topic> selectByPage(int currentPage, int pageCount) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public TopicVo getTopic(long id) throws SQLException {
-        return null;
-    }
-
-    private List<Topic> convert(ResultSet rs) {
-        List<Topic> topicList = new ArrayList<>(50);
+        List<Topic> topicList = new ArrayList<>(100);
         try {
             while (rs.next()) {
                 Topic topic = new Topic();
                 topic.setId(rs.getLong("id"));
                 topic.setAdminId(rs.getLong("admin_id"));
-                topic.setName(rs.getString("name"));
+                topic.setTopicName(rs.getString("topic_name"));
                 topic.setLogo(rs.getString("logo"));
                 topic.setDescription(rs.getString("description"));
                 topic.setArticles(rs.getInt("articles"));
@@ -87,6 +73,17 @@ public class TopicDaoImpl implements TopicDao {
         } catch (SQLException e) {
             logger.error("查询专题数据产生异常");
         }
+        DbUtil.close(rs, pstmt, connection);
         return topicList;
+    }
+
+    @Override
+    public List<Topic> selectByPage(int currentPage, int pageCount) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public TopicVo getTopic(long id) throws SQLException {
+        return null;
     }
 }

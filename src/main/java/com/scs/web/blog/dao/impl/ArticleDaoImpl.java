@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * @author mq_xu
  * @ClassName ArticleDaoImpl
- * @Description TODO
+ * @Description 文章Dao接口实现类
  * @Date 2019/11/10
  * @Version 1.0
  **/
@@ -28,18 +28,19 @@ public class ArticleDaoImpl implements ArticleDao {
     public int[] batchInsert(List<Article> articleList) throws SQLException {
         Connection connection = DbUtil.getConnection();
         connection.setAutoCommit(false);
-        String sql = "INSERT INTO t_article (user_id,title,summary,thumbnail,content,likes,comments,create_time) VALUES (?,?,?,?,?,?,?,?) ";
+        String sql = "INSERT INTO t_article (user_id,topic_id,title,summary,thumbnail,content,likes,comments,create_time) VALUES (?,?,?,?,?,?,?,?,?) ";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         articleList.forEach(article -> {
             try {
                 pstmt.setLong(1, article.getUserId());
-                pstmt.setString(2, article.getTitle());
-                pstmt.setString(3, article.getSummary());
-                pstmt.setString(4, article.getThumbnail());
-                pstmt.setString(5, article.getContent());
-                pstmt.setInt(6, article.getLikes());
-                pstmt.setInt(7, article.getComments());
-                pstmt.setObject(8, article.getCreateTime());
+                pstmt.setLong(2, article.getTopicId());
+                pstmt.setString(3, article.getTitle());
+                pstmt.setString(4, article.getSummary());
+                pstmt.setString(5, article.getThumbnail());
+                pstmt.setString(6, article.getContent());
+                pstmt.setInt(7, article.getLikes());
+                pstmt.setInt(8, article.getComments());
+                pstmt.setObject(9, article.getCreateTime());
                 pstmt.addBatch();
             } catch (SQLException e) {
                 logger.error("批量加入文章数据产生异常");
@@ -56,7 +57,7 @@ public class ArticleDaoImpl implements ArticleDao {
         Connection connection = DbUtil.getConnection();
         //从文章、专题、用户表联查出前端需要展示的数据
         String sql = "SELECT a.id,a.user_id,a.topic_id,a.title,a.summary,a.thumbnail,a.comments,a.likes,a.create_time," +
-                "b.name,b.logo,c.nickname,c.avatar " +
+                "b.topic_name,b.logo,c.nickname,c.avatar " +
                 "FROM t_article a " +
                 "LEFT JOIN t_topic b " +
                 "ON a.topic_id = b.id " +
@@ -66,7 +67,30 @@ public class ArticleDaoImpl implements ArticleDao {
                 "LIMIT 20 ";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
-        List<ArticleVo> articleVoList = convert(rs);
+        List<ArticleVo> articleVoList = new ArrayList<>(100);
+        try {
+            while (rs.next()) {
+                Article article = new Article();
+                article.setId(rs.getLong("id"));
+                article.setUserId(rs.getLong("user_id"));
+                article.setTopicId(rs.getLong("topic_id"));
+                article.setTitle(rs.getString("title"));
+                article.setThumbnail(rs.getString("thumbnail"));
+                article.setSummary(rs.getString("summary"));
+                article.setLikes(rs.getInt("likes"));
+                article.setComments(rs.getInt("comments"));
+                article.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
+                ArticleVo articleVo = new ArticleVo();
+                articleVo.setArticle(article);
+                articleVo.setNickname(rs.getString("nickname"));
+                articleVo.setAvatar(rs.getString("avatar"));
+                articleVo.setTopicName(rs.getString("topic_name"));
+                articleVo.setLogo(rs.getString("logo"));
+                articleVoList.add(articleVo);
+            }
+        } catch (SQLException e) {
+            logger.error("查询文章详情出现异常");
+        }
         DbUtil.close(rs, pstmt, connection);
         return articleVoList;
     }
@@ -79,46 +103,37 @@ public class ArticleDaoImpl implements ArticleDao {
     @Override
     public ArticleVo getArticle(long id) throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "SELECT\n" +
-                "\ta.*,\n" +
-                "\tb.nickname,\n" +
-                "\tb.avatar \n" +
-                "FROM\n" +
-                "\tt_article a\n" +
-                "\tLEFT JOIN t_user b ON a.user_id = b.id \n" +
-                "WHERE\n" +
-                "\ta.id = ? ";
+        String sql = "SELECT a.*,b.topic_name,b.logo,c.nickname,c.avatar " +
+                "FROM t_article a " +
+                "LEFT JOIN t_topic b " +
+                "ON a.topic_id = b.id " +
+                "LEFT JOIN t_user c " +
+                "ON a.user_id = c.id " +
+                "WHERE a.id = ?  ";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         pstmt.setLong(1, id);
         ResultSet rs = pstmt.executeQuery();
-        ArticleVo articleVo = convert(rs).get(0);
+        ArticleVo articleVo = null;
+        if (rs.next()) {
+            Article article = new Article();
+            article.setId(rs.getLong("id"));
+            article.setUserId(rs.getLong("user_id"));
+            article.setTopicId(rs.getLong("topic_id"));
+            article.setTitle(rs.getString("title"));
+            article.setThumbnail(rs.getString("thumbnail"));
+            article.setSummary(rs.getString("summary"));
+            article.setLikes(rs.getInt("likes"));
+            article.setComments(rs.getInt("comments"));
+            article.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
+            articleVo = new ArticleVo();
+            articleVo.setArticle(article);
+            articleVo.setNickname(rs.getString("nickname"));
+            articleVo.setAvatar(rs.getString("avatar"));
+            articleVo.setTopicName(rs.getString("topic_name"));
+            articleVo.setLogo(rs.getString("logo"));
+        }
         DbUtil.close(rs, pstmt, connection);
         return articleVo;
     }
 
-    private List<ArticleVo> convert(ResultSet rs) {
-        List<ArticleVo> articleVoList = new ArrayList<>(50);
-        try {
-            while (rs.next()) {
-                ArticleVo article = new ArticleVo();
-                article.setId(rs.getLong("id"));
-                article.setUserId(rs.getLong("user_id"));
-                article.setTopicId(rs.getLong("topic_id"));
-                article.setTitle(rs.getString("title"));
-                article.setThumbnail(rs.getString("thumbnail"));
-                article.setSummary(rs.getString("summary"));
-                article.setNickname(rs.getString("nickname"));
-                article.setAvatar(rs.getString("avatar"));
-                article.setLikes(rs.getInt("likes"));
-                article.setComments(rs.getInt("comments"));
-                article.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
-                article.setName(rs.getString("name"));
-                article.setLogo(rs.getString("logo"));
-                articleVoList.add(article);
-            }
-        } catch (SQLException e) {
-            logger.error("查询文章详情出现异常");
-        }
-        return articleVoList;
-    }
 }

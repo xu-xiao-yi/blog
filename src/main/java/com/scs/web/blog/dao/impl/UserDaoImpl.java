@@ -7,7 +7,10 @@ import com.scs.web.blog.util.DbUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +59,6 @@ public class UserDaoImpl implements UserDao {
             }
         });
         int[] result = pstmt.executeBatch();
-        connection.commit();
         DbUtil.close(null, pstmt, connection);
         return result;
     }
@@ -65,41 +67,39 @@ public class UserDaoImpl implements UserDao {
     public User findUserByMobile(String mobile) throws SQLException {
         Connection connection = DbUtil.getConnection();
         String sql = "SELECT * FROM t_user WHERE mobile = ? ";
-        PreparedStatement pst = connection.prepareStatement(sql);
-        pst.setString(1, mobile);
-        ResultSet rs = pst.executeQuery();
-        return convert(rs).get(0);
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setString(1, mobile);
+        ResultSet rs = pstmt.executeQuery();
+        User user = null;
+        if (rs.next()) {
+            user = new User();
+            user.setId(rs.getLong("id"));
+            user.setMobile(rs.getString("mobile"));
+            user.setPassword(rs.getString("password"));
+            user.setNickname(rs.getString("nickname"));
+            user.setAvatar(rs.getString("avatar"));
+            user.setGender(rs.getString("gender"));
+            user.setBirthday(rs.getDate("birthday").toLocalDate());
+            user.setIntroduction(rs.getString("introduction"));
+            user.setBanner(rs.getString("banner"));
+            user.setEmail(rs.getString("email"));
+            user.setAddress(rs.getString("address"));
+            user.setFollows(rs.getShort("follows"));
+            user.setFans(rs.getShort("fans"));
+            user.setArticles(rs.getShort("articles"));
+            user.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
+            user.setStatus(rs.getShort("status"));
+        }
+        DbUtil.close(rs, pstmt, connection);
+        return user;
     }
 
     @Override
     public List<User> selectHotUsers() throws SQLException {
         Connection connection = DbUtil.getConnection();
         String sql = "SELECT * FROM t_user ORDER BY fans DESC LIMIT 10 ";
-        PreparedStatement pst = connection.prepareStatement(sql);
-        ResultSet rs = pst.executeQuery();
-        return convert(rs);
-    }
-
-    @Override
-    public List<User> selectPageUsers(int currentPage, int pageCount) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public UserVo getUser(long id) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public int getTotalUser() throws SQLException {
-        Connection connection = DbUtil.getConnection();
-        String sql = "SELECT COUNT(*) FROM t_user ";
-        PreparedStatement pst = connection.prepareStatement(sql);
-        ResultSet rs = pst.executeQuery();
-        return rs.getRow();
-    }
-
-    private List<User> convert(ResultSet rs) {
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        ResultSet rs = pstmt.executeQuery();
         List<User> userList = new ArrayList<>(50);
         try {
             while (rs.next()) {
@@ -125,6 +125,29 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             logger.error("查询用户数据产生异常");
         }
+        DbUtil.close(rs, pstmt, connection);
         return userList;
     }
+
+    @Override
+    public List<User> selectPageUsers(int currentPage, int pageCount) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public UserVo getUser(long id) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public int getTotalUser() throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT COUNT(*) FROM t_user ";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        ResultSet rs = pstmt.executeQuery();
+        int n = rs.getRow();
+        DbUtil.close(rs, pstmt, connection);
+        return n;
+    }
+
 }

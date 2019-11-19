@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 public class Article {
     private Long id;
     private Long userId;
+    private Long topicId;
     private String title;
     private String summary;
     private String thumbnail;

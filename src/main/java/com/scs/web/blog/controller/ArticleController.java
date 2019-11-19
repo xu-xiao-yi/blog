@@ -23,34 +23,28 @@ import java.io.PrintWriter;
  * @Date 2019/11/11
  * @Version 1.0
  **/
-@WebServlet(urlPatterns = {"/api/article/*"})
+@WebServlet(urlPatterns = {"/api/article", "/api/article/*"})
 public class ArticleController extends HttpServlet {
-
     private ArticleService articleService = ServiceFactory.getArticleServiceInstance();
     private static Logger logger = LoggerFactory.getLogger(ArticleController.class);
 
-    private String getPatten(String uri) {
-        int len = "/api/article".length();
-        return uri.substring(len);
-    }
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String patten = getPatten(req.getRequestURI());
-        switch (patten) {
-            case "/hot":
+        //取得请求地址
+        String uri = req.getRequestURI().trim();
+        if ("/api/article".equals(uri)) {
+            String page = req.getParameter("page");
+            if (page != null) {
+                getArticlesByPage(req, resp);
+            } else {
                 getHotArticles(req, resp);
-                break;
-            case "/list?page=*":
-                getPageArticles(req, resp);
-                break;
-            case "/*":
-                getArticle(req, resp);
-                break;
+            }
+        } else {
+            getArticle(req, resp);
         }
     }
 
-    private void getHotArticles(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void getHotArticles(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Gson gson = new GsonBuilder().create();
         Result result = articleService.getHotArticles();
         PrintWriter out = resp.getWriter();
@@ -58,10 +52,20 @@ public class ArticleController extends HttpServlet {
         out.close();
     }
 
-    private void getPageArticles(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void getArticlesByPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String page = req.getParameter("page");
+        resp.getWriter().print("第" + page + "页");
     }
 
-    private void getArticle(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void getArticle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String info = req.getPathInfo().trim();
+        //取得路径参数
+        String id = info.substring(info.indexOf("/") + 1);
+        Result result = articleService.getArticle(Long.parseLong(id));
+        Gson gson = new GsonBuilder().create();
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(result));
+        out.close();
     }
 
     @Override

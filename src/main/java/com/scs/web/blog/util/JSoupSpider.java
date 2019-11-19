@@ -146,7 +146,7 @@ public class JSoupSpider {
                 Element articles = elements.select(".count > a").get(0);
                 Element follows = elements.select(".count > a").get(0);
                 topic.setAdminId(DataUtil.getUserId());
-                topic.setName(name.text());
+                topic.setTopicName(name.text());
                 topic.setLogo(logo.attr("src"));
                 topic.setDescription(description.text());
                 String[] str = StringUtil.getDigital(articles.text());

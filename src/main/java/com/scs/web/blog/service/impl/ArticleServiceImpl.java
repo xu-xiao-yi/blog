@@ -33,8 +33,9 @@ public class ArticleServiceImpl implements ArticleService {
         }
         if (articleVoList != null) {
             return Result.success(articleVoList);
+        } else {
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
         }
-        return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
     }
 
     @Override
@@ -44,6 +45,16 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Result getArticle(long id) {
-        return null;
+        ArticleVo articleVo = null;
+        try {
+            articleVo = articleDao.getArticle(id);
+        } catch (SQLException e) {
+            logger.error("根据id查询文章出现异常");
+        }
+        if (articleVo != null) {
+            return Result.success(articleVo);
+        } else {
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
+        }
     }
 }

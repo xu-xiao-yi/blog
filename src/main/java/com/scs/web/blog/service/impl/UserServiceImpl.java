@@ -61,9 +61,9 @@ public class UserServiceImpl implements UserService {
         if (userList != null) {
             //成功并返回数据
             return Result.success(userList);
+        } else {
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
         }
-        //失败，不返回数据
-        return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
     }
 
     @Override
@@ -81,7 +81,8 @@ public class UserServiceImpl implements UserService {
         }
         if (userVo != null) {
             return Result.success(userVo);
+        } else {
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
         }
-        return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
     }
 }

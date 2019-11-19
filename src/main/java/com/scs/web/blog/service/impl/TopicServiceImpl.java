@@ -35,8 +35,9 @@ public class TopicServiceImpl implements TopicService {
         }
         if (topicList != null) {
             return Result.success(topicList);
+        } else {
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
         }
-        return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
     }
 
     @Override
@@ -54,7 +55,8 @@ public class TopicServiceImpl implements TopicService {
         }
         if (topicVo != null) {
             return Result.success(topicVo);
+        } else {
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
         }
-        return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
     }
 }
