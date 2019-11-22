@@ -21,4 +21,11 @@ public class TopicDaoTest {
         List<Topic> topicList = topicDao.selectHotTopics();
         System.out.println(topicList.size());
     }
+
+    @Test
+    public void selectByKeywords() throws SQLException{
+        List<Topic> topicList = topicDao.selectByKeywords("一");
+        System.out.println(topicList.size());
+    }
+
 }

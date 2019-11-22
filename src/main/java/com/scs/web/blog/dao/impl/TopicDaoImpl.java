@@ -62,8 +62,17 @@ public class TopicDaoImpl implements TopicDao {
     }
 
     @Override
-    public List<Topic> selectByPage(int currentPage, int pageCount) throws SQLException {
-        return null;
+    public List<Topic> selectByPage(int currentPage, int count) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT * FROM t_topic " +
+                "ORDER BY id  LIMIT ?,? ";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setInt(1, (currentPage - 1) * count);
+        pst.setInt(2, count);
+        ResultSet rs = pst.executeQuery();
+        List<Topic> topicList = convert(rs);
+        DbUtil.close(connection, pst, rs);
+        return topicList;
     }
 
     @Override
@@ -91,6 +100,20 @@ public class TopicDaoImpl implements TopicDao {
         }
         DbUtil.close(connection, pst, rs);
         return topicVo;
+    }
+
+    @Override
+    public List<Topic> selectByKeywords(String keywords) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT * FROM t_topic " +
+                "WHERE topic_name LIKE ?  OR description LIKE ? ";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setString(1, "%" + keywords + "%");
+        pst.setString(2, "%" + keywords + "%");
+        ResultSet rs = pst.executeQuery();
+        List<Topic> topicList = convert(rs);
+        DbUtil.close(connection, pst, rs);
+        return topicList;
     }
 
     private List<Topic> convert(ResultSet rs) {

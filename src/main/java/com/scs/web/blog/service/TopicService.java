@@ -32,4 +32,21 @@ public interface TopicService {
      * @return
      */
     Result getTopic(long id);
+
+    /**
+     * 根据名称或描述模糊搜索专题
+     *
+     * @param keywords
+     * @return
+     */
+    Result selectByKeywords(String keywords);
+
+
+    /**
+     * 分页查询专题信息
+     * @param currentPage
+     * @param count
+     * @return
+     */
+    Result selectByPage(int currentPage,int count);
 }

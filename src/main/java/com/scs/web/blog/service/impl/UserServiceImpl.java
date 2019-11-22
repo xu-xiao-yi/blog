@@ -67,9 +67,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result getPageUsers() {
-        return null;
+    public Result selectByPage(int currentPage, int count) {
+        List<User> userList = null;
+        try {
+            userList = userDao.selectByPage(currentPage, count);
+        } catch (
+                SQLException e) {
+            logger.error("分页查询用户出现异常");
+        }
+        if (userList != null) {
+            return Result.success(userList);
+        } else {
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
+        }
     }
+
 
     @Override
     public Result getUser(long id) {
@@ -81,6 +93,21 @@ public class UserServiceImpl implements UserService {
         }
         if (userVo != null) {
             return Result.success(userVo);
+        } else {
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
+        }
+    }
+
+    @Override
+    public Result selectByKeywords(String keywords) {
+        List<User> userList = null;
+        try {
+            userList = userDao.selectByKeywords(keywords);
+        } catch (SQLException e) {
+            logger.error("根据关键字查询用户出现异常");
+        }
+        if (userList != null) {
+            return Result.success(userList);
         } else {
             return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
         }

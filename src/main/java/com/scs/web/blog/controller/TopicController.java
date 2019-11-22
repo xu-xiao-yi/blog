@@ -33,8 +33,12 @@ public class TopicController extends HttpServlet {
         String uri = req.getRequestURI().trim();
         if ("/api/topic".equals(uri)) {
             String page = req.getParameter("page");
+            String keywords = req.getParameter("keywords");
+            String count = req.getParameter("count");
             if (page != null) {
-                getTopicsByPage(req, resp);
+                getTopicsByPage(resp, Integer.parseInt(page), Integer.parseInt(count));
+            } else if (keywords != null) {
+                getTopicsByKeywords(resp, keywords);
             } else {
                 getHotTopics(req, resp);
             }
@@ -51,9 +55,20 @@ public class TopicController extends HttpServlet {
         out.close();
     }
 
-    private void getTopicsByPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String page = req.getParameter("page");
-        resp.getWriter().print("第" + page + "页");
+    private void getTopicsByPage(HttpServletResponse resp, int page, int count) throws ServletException, IOException {
+        Gson gson = new GsonBuilder().create();
+        Result result = topicService.selectByPage(page, count);
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(result));
+        out.close();
+    }
+
+    private void getTopicsByKeywords(HttpServletResponse resp, String keywords) throws ServletException, IOException {
+        Gson gson = new GsonBuilder().create();
+        Result result = topicService.selectByKeywords(keywords);
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(result));
+        out.close();
     }
 
     private void getTopic(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

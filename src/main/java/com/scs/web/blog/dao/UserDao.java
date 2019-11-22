@@ -56,7 +56,7 @@ public interface UserDao {
      * @return
      * @throws SQLException
      */
-    List<User> selectPageUsers(int currentPage, int pageCount) throws SQLException;
+    List<User> selectByPage(int currentPage, int count) throws SQLException;
 
     /**
      * 根据id查询用户详情，包括其他数据
@@ -65,5 +65,14 @@ public interface UserDao {
      * @throws SQLException
      */
     UserVo getUser(long id) throws SQLException;
+
+
+    /**
+     * 模糊搜索用户
+     * @param keywords
+     * @return
+     * @throws SQLException
+     */
+    List<User> selectByKeywords(String keywords) throws SQLException;
 
 }

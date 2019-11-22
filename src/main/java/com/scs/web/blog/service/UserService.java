@@ -29,7 +29,7 @@ public interface UserService {
      * 获取分页用户信息
      * @return
      */
-    Result getPageUsers();
+    Result selectByPage(int currentPage,int count);
 
     /**
      * 根据id查询用户详情数据
@@ -37,4 +37,12 @@ public interface UserService {
      * @return
      */
     Result getUser(long id);
+
+    /**
+     * 根据昵称或简介模糊搜索用户
+     *
+     * @param keywords
+     * @return
+     */
+    Result selectByKeywords(String keywords);
 }

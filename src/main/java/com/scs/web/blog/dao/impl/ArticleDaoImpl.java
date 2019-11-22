@@ -104,9 +104,10 @@ public class ArticleDaoImpl implements ArticleDao {
                 "ON a.topic_id = b.id " +
                 "LEFT JOIN t_user c " +
                 "ON a.user_id = c.id " +
-                "WHERE a.title LIKE ? ";
+                "WHERE a.title LIKE ?  OR a.summary LIKE ? ";
         PreparedStatement pst = connection.prepareStatement(sql);
         pst.setString(1, "%" + keywords + "%");
+        pst.setString(2, "%" + keywords + "%");
         ResultSet rs = pst.executeQuery();
         List<ArticleVo> articleVos = convert(rs);
         DbUtil.close(connection, pst, rs);

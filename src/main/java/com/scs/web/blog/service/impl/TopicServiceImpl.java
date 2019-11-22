@@ -69,4 +69,34 @@ public class TopicServiceImpl implements TopicService {
             return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
         }
     }
+
+    @Override
+    public Result selectByKeywords(String keywords) {
+        List<Topic> topicList = null;
+        try {
+            topicList = topicDao.selectByKeywords(keywords);
+        } catch (SQLException e) {
+            logger.error("根据关键字查询专题出现异常");
+        }
+        if (topicList != null) {
+            return Result.success(topicList);
+        } else {
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
+        }
+    }
+
+    @Override
+    public Result selectByPage(int currentPage, int count) {
+        List<Topic> topicList = null;
+        try {
+            topicList = topicDao.selectByPage(currentPage, count);
+        } catch (SQLException e) {
+            logger.error("分页查询专题出现异常");
+        }
+        if (topicList != null) {
+            return Result.success(topicList);
+        } else {
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
+        }
+    }
 }

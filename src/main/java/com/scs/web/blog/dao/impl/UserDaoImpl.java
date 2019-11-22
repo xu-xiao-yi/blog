@@ -87,13 +87,36 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> selectPageUsers(int currentPage, int pageCount) throws SQLException {
-        return null;
+    public List<User> selectByPage(int currentPage, int count) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT * FROM t_user " +
+                "ORDER BY id  LIMIT ?,? ";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setInt(1, (currentPage - 1) * count);
+        pst.setInt(2, count);
+        ResultSet rs = pst.executeQuery();
+        List<User> userList = convert(rs);
+        DbUtil.close(connection, pst, rs);
+        return userList;
     }
 
     @Override
     public UserVo getUser(long id) throws SQLException {
         return null;
+    }
+
+    @Override
+    public List<User> selectByKeywords(String keywords) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT * FROM t_user " +
+                "WHERE nickname LIKE ?  OR introduction LIKE ? ";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setString(1, "%" + keywords + "%");
+        pst.setString(2, "%" + keywords + "%");
+        ResultSet rs = pst.executeQuery();
+        List<User> userList = convert(rs);
+        DbUtil.close(connection, pst, rs);
+        return userList;
     }
 
     private List<User> convert(ResultSet rs) {
@@ -109,6 +132,7 @@ public class UserDaoImpl implements UserDao {
                 user.setGender(rs.getString("gender"));
                 user.setBirthday(rs.getDate("birthday").toLocalDate());
                 user.setIntroduction(rs.getString("introduction"));
+                user.setHomepage(rs.getString("homepage"));
                 user.setBanner(rs.getString("banner"));
                 user.setEmail(rs.getString("email"));
                 user.setAddress(rs.getString("address"));

@@ -27,4 +27,10 @@ public class UserDaoTest {
         List<User> userList = userDao.selectHotUsers();
         userList.forEach(System.out::println);
     }
+
+    @Test
+    public void selectByKeywords() throws SQLException{
+        List<User> userList = userDao.selectByKeywords("王");
+        System.out.println(userList.size());
+    }
 }

@@ -36,8 +36,12 @@ public class UserController extends HttpServlet {
         String uri = req.getRequestURI().trim();
         if ("/api/user".equals(uri)) {
             String page = req.getParameter("page");
+            String keywords = req.getParameter("keywords");
+            String count = req.getParameter("count");
             if (page != null) {
-                getUsersByPage(req, resp);
+                getUsersByPage(resp, Integer.parseInt(page), Integer.parseInt(count));
+            } else if (keywords != null) {
+                getUsersByKeywords(resp, keywords);
             } else {
                 getHotUsers(req, resp);
             }
@@ -54,10 +58,22 @@ public class UserController extends HttpServlet {
         out.close();
     }
 
-    private void getUsersByPage(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String page = req.getParameter("page");
-        resp.getWriter().print("第" + page + "页");
+    private void getUsersByPage(HttpServletResponse resp, int page, int count) throws IOException {
+        Gson gson = new GsonBuilder().create();
+        Result result = userService.selectByPage(page, count);
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(result));
+        out.close();
     }
+
+    private void getUsersByKeywords(HttpServletResponse resp, String keywords) throws IOException {
+        Gson gson = new GsonBuilder().create();
+        Result result = userService.selectByKeywords(keywords);
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(result));
+        out.close();
+    }
+
 
     private void getUser(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String info = req.getPathInfo().trim();
