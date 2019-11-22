@@ -35,8 +35,9 @@ public class ArticleController extends HttpServlet {
         if ("/api/article".equals(uri)) {
             String page = req.getParameter("page");
             String keywords = req.getParameter("keywords");
+            String count = req.getParameter("count");
             if (page != null) {
-                getArticlesByPage(req, resp);
+                getArticlesByPage(resp, Integer.parseInt(page), Integer.parseInt(count));
             } else if (keywords != null) {
                 getArticlesByKeywords(resp, keywords);
             } else {
@@ -55,9 +56,12 @@ public class ArticleController extends HttpServlet {
         out.close();
     }
 
-    private void getArticlesByPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String page = req.getParameter("page");
-        resp.getWriter().print("第" + page + "页");
+    private void getArticlesByPage(HttpServletResponse resp, int page, int count) throws ServletException, IOException {
+        Gson gson = new GsonBuilder().create();
+        Result result = articleService.getArticlesByPage(page, count);
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(result));
+        out.close();
     }
 
     private void getArticlesByKeywords(HttpServletResponse resp, String keywords) throws ServletException, IOException {

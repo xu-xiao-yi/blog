@@ -88,10 +88,9 @@ public class UserController extends HttpServlet {
         logger.info("登录用户信息：" + stringBuilder.toString());
         Gson gson = new GsonBuilder().create();
         UserDto userDto = gson.fromJson(stringBuilder.toString(), UserDto.class);
-        logger.info("用户：" + userDto);
         String inputCode = userDto.getCode();
-        String sessionId = req.getHeader("SessionId");
-        logger.info(sessionId);
+        String sessionId = req.getParameter("token");
+        System.out.println(sessionId);
         MySessionContext myc = MySessionContext.getInstance();
         HttpSession session = myc.getSession(sessionId);
         String correctCode = session.getAttribute("code").toString();

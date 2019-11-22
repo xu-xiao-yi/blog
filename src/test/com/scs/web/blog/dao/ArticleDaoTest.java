@@ -34,4 +34,10 @@ public class ArticleDaoTest {
         List<ArticleVo> articleVoList = articleDao.selectByKeywords("微");
         System.out.println(articleVoList.size());
     }
+
+    @Test
+    public void selectByPage() throws SQLException {
+        List<ArticleVo> articleVoList = articleDao.selectByPage(1, 10);
+        articleVoList.forEach(articleVo -> System.out.println(articleVo.getId()));
+    }
 }

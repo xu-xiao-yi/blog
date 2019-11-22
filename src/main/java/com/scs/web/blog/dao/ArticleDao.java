@@ -39,7 +39,7 @@ public interface ArticleDao {
      * @return
      * @throws SQLException
      */
-    List<ArticleVo> selectByPage(int currentPage, int pageCount) throws SQLException;
+    List<ArticleVo> selectByPage(int currentPage, int count) throws SQLException;
 
 
     /**
