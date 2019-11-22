@@ -57,4 +57,19 @@ public class ArticleServiceImpl implements ArticleService {
             return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
         }
     }
+
+    @Override
+    public Result selectByKeywords(String keywords) {
+        List<ArticleVo> articleVoList = null;
+        try {
+            articleVoList = articleDao.selectByKeywords(keywords);
+        } catch (SQLException e) {
+            logger.error("根据关键字查询文章出现异常");
+        }
+        if (articleVoList != null) {
+            return Result.success(articleVoList);
+        } else {
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
+        }
+    }
 }

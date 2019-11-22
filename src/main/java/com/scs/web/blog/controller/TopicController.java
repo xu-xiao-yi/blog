@@ -60,6 +60,10 @@ public class TopicController extends HttpServlet {
         String info = req.getPathInfo().trim();
         //取得路径参数
         String id = info.substring(info.indexOf("/") + 1);
-        resp.getWriter().println(id);
+        Gson gson = new GsonBuilder().create();
+        Result result = topicService.getTopic(Long.parseLong(id));
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(result));
+        out.close();
     }
 }

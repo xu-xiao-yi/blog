@@ -34,8 +34,11 @@ public class ArticleController extends HttpServlet {
         String uri = req.getRequestURI().trim();
         if ("/api/article".equals(uri)) {
             String page = req.getParameter("page");
+            String keywords = req.getParameter("keywords");
             if (page != null) {
                 getArticlesByPage(req, resp);
+            } else if (keywords != null) {
+                getArticlesByKeywords(resp, keywords);
             } else {
                 getHotArticles(req, resp);
             }
@@ -55,6 +58,14 @@ public class ArticleController extends HttpServlet {
     private void getArticlesByPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String page = req.getParameter("page");
         resp.getWriter().print("第" + page + "页");
+    }
+
+    private void getArticlesByKeywords(HttpServletResponse resp, String keywords) throws ServletException, IOException {
+        Gson gson = new GsonBuilder().create();
+        Result result = articleService.selectByKeywords(keywords);
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(result));
+        out.close();
     }
 
     private void getArticle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

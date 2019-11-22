@@ -66,11 +66,4 @@ public interface UserDao {
      */
     UserVo getUser(long id) throws SQLException;
 
-    /**
-     * 统计用户总数
-     *
-     * @return
-     * @throws SQLException
-     */
-    int getTotalUser() throws SQLException;
 }

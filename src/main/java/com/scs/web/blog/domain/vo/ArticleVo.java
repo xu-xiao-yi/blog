@@ -1,7 +1,8 @@
 package com.scs.web.blog.domain.vo;
 
-import com.scs.web.blog.entity.Article;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 /**
  * @author mq_xu
@@ -12,7 +13,16 @@ import lombok.Data;
  **/
 @Data
 public class ArticleVo {
-    private Article article;
+    private Long id;
+    private Long userId;
+    private Long topicId;
+    private String title;
+    private String summary;
+    private String thumbnail;
+    private String content;
+    private Integer likes;
+    private Integer comments;
+    private LocalDateTime createTime;
     private String nickname;
     private String avatar;
     private String topicName;

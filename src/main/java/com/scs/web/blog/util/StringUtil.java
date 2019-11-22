@@ -48,13 +48,13 @@ public class StringUtil {
     }
 
     public static void main(String[] args) {
-        Pattern p = Pattern.compile("\\d{2,}");//这个2是指连续数字的最少个数
-        String u = "收录了 27093 篇文章，35936 人关注";
-        Matcher m = p.matcher(u);
-        int i = 0;
-        while (m.find()) {
-            System.out.println(m.group());
-            i++;
-        }
+//        Pattern p = Pattern.compile("\\d{2,}");//这个2是指连续数字的最少个数
+//        String u = "收录了 27093 篇文章，35936 人关注";
+//        Matcher m = p.matcher(u);
+//        int i = 0;
+//        while (m.find()) {
+//            System.out.println(m.group());
+//            i++;
+//        }
     }
 }

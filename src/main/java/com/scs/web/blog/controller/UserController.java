@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.scs.web.blog.domain.dto.UserDto;
 import com.scs.web.blog.factory.ServiceFactory;
+import com.scs.web.blog.listener.MySessionContext;
 import com.scs.web.blog.service.UserService;
 import com.scs.web.blog.util.Result;
 import com.scs.web.blog.util.ResultCode;
@@ -12,9 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -89,8 +88,13 @@ public class UserController extends HttpServlet {
         logger.info("登录用户信息：" + stringBuilder.toString());
         Gson gson = new GsonBuilder().create();
         UserDto userDto = gson.fromJson(stringBuilder.toString(), UserDto.class);
+        logger.info("用户：" + userDto);
         String inputCode = userDto.getCode();
-        String correctCode = this.getServletContext().getAttribute("code").toString();
+        String sessionId = req.getHeader("SessionId");
+        logger.info(sessionId);
+        MySessionContext myc = MySessionContext.getInstance();
+        HttpSession session = myc.getSession(sessionId);
+        String correctCode = session.getAttribute("code").toString();
         PrintWriter out = resp.getWriter();
         if (inputCode.equalsIgnoreCase(correctCode)) {
             Result result = userService.signIn(userDto);

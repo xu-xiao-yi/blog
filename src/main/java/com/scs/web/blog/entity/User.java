@@ -1,6 +1,8 @@
 package com.scs.web.blog.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,6 +15,8 @@ import java.time.LocalDateTime;
  * @Version 1.0
  **/
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     private Long id;
     private String mobile;
@@ -23,11 +27,8 @@ public class User {
     private LocalDate birthday;
     private String address;
     private String introduction;
-    //个人中心背景图
     private String banner;
-    //邮箱
     private String email;
-    //主页
     private String homepage;
     private Short follows;
     private Short fans;

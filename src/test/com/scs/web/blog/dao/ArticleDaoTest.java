@@ -14,19 +14,24 @@ public class ArticleDaoTest {
 
     @Test
     public void batchInsert() throws SQLException {
-        int[] result = articleDao.batchInsert(JSoupSpider.getArticles());
-        System.out.println(result.length);
+        articleDao.batchInsert(JSoupSpider.getArticles());
     }
 
     @Test
     public void selectHotArticles() throws SQLException {
         List<ArticleVo> articleVoList = articleDao.selectHotArticles();
-        articleVoList.forEach(System.out::println);
+        System.out.println(articleVoList.size());
     }
 
     @Test
     public void getArticle() throws SQLException {
         ArticleVo article = articleDao.getArticle(11);
         System.out.println(article);
+    }
+
+    @Test
+    public void selectByKeywords() throws SQLException {
+        List<ArticleVo> articleVoList = articleDao.selectByKeywords("微");
+        System.out.println(articleVoList.size());
     }
 }

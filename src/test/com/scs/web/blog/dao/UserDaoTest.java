@@ -13,8 +13,7 @@ public class UserDaoTest {
 
     @Test
     public void batchInsert() throws SQLException {
-        int[] result = userDao.batchInsert(JSoupSpider.getUsers());
-        System.out.println(result);
+        userDao.batchInsert(JSoupSpider.getUsers());
     }
 
     @Test
@@ -24,14 +23,8 @@ public class UserDaoTest {
     }
 
     @Test
-    public void selectAll() throws SQLException {
+    public void selectHotUsers() throws SQLException {
         List<User> userList = userDao.selectHotUsers();
         userList.forEach(System.out::println);
-    }
-
-    @Test
-    public void getTotalUser() throws SQLException {
-        int result = userDao.getTotalUser();
-        System.out.println(result);
     }
 }

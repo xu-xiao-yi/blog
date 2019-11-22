@@ -13,8 +13,7 @@ public class TopicDaoTest {
 
     @Test
     public void batchInsert() throws SQLException {
-        int[] result = topicDao.batchInsert(JSoupSpider.getTopics());
-        System.out.println(result.length);
+        topicDao.batchInsert(JSoupSpider.getTopics());
     }
 
     @Test

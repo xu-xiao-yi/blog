@@ -1,10 +1,9 @@
 package com.scs.web.blog.domain.vo;
 
 import com.scs.web.blog.domain.dto.SimpleUser;
-import com.scs.web.blog.entity.Article;
-import com.scs.web.blog.entity.Topic;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -16,8 +15,15 @@ import java.util.List;
  **/
 @Data
 public class TopicVo {
-    private Topic topic;
-    private List<Article> articles;
+    private Long id;
+    private Long adminId;
+    private String topicName;
+    private String logo;
+    private String description;
+    private Integer articles;
+    private Integer follows;
+    private LocalDateTime createTime;
+    private List<ArticleVo> articleList;
     private SimpleUser simpleUser;
     private List<SimpleUser> simpleUsers;
 }

@@ -29,24 +29,24 @@ public class TopicDaoImpl implements TopicDao {
         Connection connection = DbUtil.getConnection();
         connection.setAutoCommit(false);
         String sql = "INSERT INTO t_topic (admin_id,topic_name,logo,description,articles,follows,create_time) VALUES (?,?,?,?,?,?,?) ";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
+        PreparedStatement pst = connection.prepareStatement(sql);
         topicList.forEach(topic -> {
             try {
-                pstmt.setLong(1, topic.getAdminId());
-                pstmt.setString(2, topic.getTopicName());
-                pstmt.setString(3, topic.getLogo());
-                pstmt.setString(4, topic.getDescription());
-                pstmt.setInt(5, topic.getArticles());
-                pstmt.setInt(6, topic.getFollows());
-                pstmt.setObject(7, topic.getCreateTime());
-                pstmt.addBatch();
+                pst.setLong(1, topic.getAdminId());
+                pst.setString(2, topic.getTopicName());
+                pst.setString(3, topic.getLogo());
+                pst.setString(4, topic.getDescription());
+                pst.setInt(5, topic.getArticles());
+                pst.setInt(6, topic.getFollows());
+                pst.setObject(7, topic.getCreateTime());
+                pst.addBatch();
             } catch (SQLException e) {
                 logger.error("批量加入专题数据产生异常");
             }
         });
-        int[] result = pstmt.executeBatch();
+        int[] result = pst.executeBatch();
         connection.commit();
-        DbUtil.close(null, pstmt, connection);
+        DbUtil.close(connection, pst);
         return result;
     }
 
@@ -54,8 +54,46 @@ public class TopicDaoImpl implements TopicDao {
     public List<Topic> selectHotTopics() throws SQLException {
         Connection connection = DbUtil.getConnection();
         String sql = "SELECT * FROM t_topic ORDER BY follows DESC LIMIT 10 ";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        ResultSet rs = pstmt.executeQuery();
+        PreparedStatement pst = connection.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+        List<Topic> topicList = convert(rs);
+        DbUtil.close(connection, pst, rs);
+        return topicList;
+    }
+
+    @Override
+    public List<Topic> selectByPage(int currentPage, int pageCount) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public TopicVo getTopic(long id) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT a.*,b.nickname,b.avatar " +
+                "FROM t_topic a " +
+                "LEFT JOIN t_user b " +
+                "ON a.admin_id = b.id " +
+                "WHERE a.id = ?  ";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setLong(1, id);
+        ResultSet rs = pst.executeQuery();
+        TopicVo topicVo = null;
+        if (rs.next()) {
+            topicVo = new TopicVo();
+            topicVo.setId(rs.getLong("id"));
+            topicVo.setAdminId(rs.getLong("admin_id"));
+            topicVo.setTopicName(rs.getString("topic_name"));
+            topicVo.setLogo(rs.getString("logo"));
+            topicVo.setDescription(rs.getString("description"));
+            topicVo.setArticles(rs.getInt("articles"));
+            topicVo.setFollows(rs.getInt("follows"));
+            topicVo.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
+        }
+        DbUtil.close(connection, pst, rs);
+        return topicVo;
+    }
+
+    private List<Topic> convert(ResultSet rs) {
         List<Topic> topicList = new ArrayList<>(100);
         try {
             while (rs.next()) {
@@ -71,19 +109,8 @@ public class TopicDaoImpl implements TopicDao {
                 topicList.add(topic);
             }
         } catch (SQLException e) {
-            logger.error("查询专题数据产生异常");
+            logger.error("专题数据结果集解析产生异常");
         }
-        DbUtil.close(rs, pstmt, connection);
         return topicList;
-    }
-
-    @Override
-    public List<Topic> selectByPage(int currentPage, int pageCount) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public TopicVo getTopic(long id) throws SQLException {
-        return null;
     }
 }
