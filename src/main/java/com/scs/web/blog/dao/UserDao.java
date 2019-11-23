@@ -57,7 +57,7 @@ public interface UserDao {
     List<User> selectByPage(int currentPage, int count) throws SQLException;
 
     /**
-     * 根据id查询用户详情，包括其他数据
+     * 根据id查询用户
      * @param  id
      * @return
      * @throws SQLException

@@ -40,7 +40,7 @@ public interface TopicDao {
 
 
     /**
-     * 分页显示专题信息
+     * 分页获取专题
      * @param currentPage
      * @param pageCount
      * @return

@@ -1,7 +1,9 @@
 package com.scs.web.blog.service.impl;
 
+import com.scs.web.blog.dao.ArticleDao;
 import com.scs.web.blog.dao.UserDao;
 import com.scs.web.blog.domain.dto.UserDto;
+import com.scs.web.blog.domain.vo.ArticleVo;
 import com.scs.web.blog.domain.vo.UserVo;
 import com.scs.web.blog.entity.User;
 import com.scs.web.blog.factory.DaoFactory;
@@ -24,6 +26,7 @@ import java.util.List;
  **/
 public class UserServiceImpl implements UserService {
     private UserDao userDao = DaoFactory.getUserDaoInstance();
+    private ArticleDao articleDao = DaoFactory.getArticleDaoInstance();
     private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
@@ -92,10 +95,17 @@ public class UserServiceImpl implements UserService {
             logger.error("根据id获取用户详情出现异常");
         }
         if (userVo != null) {
-            return Result.success(userVo);
-        } else {
-            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
+            try {
+                List<ArticleVo> articleVoList = articleDao.selectByUserId(id);
+                userVo.setArticleList(articleVoList);
+                return Result.success(userVo);
+            } catch (SQLException e) {
+                logger.error("根据用户id获取文章列表数据出现异常");
+            }
         }
+
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
+
     }
 
     @Override

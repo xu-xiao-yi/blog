@@ -3,6 +3,7 @@ package com.scs.web.blog.dao.impl;
 import com.scs.web.blog.dao.UserDao;
 import com.scs.web.blog.domain.vo.UserVo;
 import com.scs.web.blog.entity.User;
+import com.scs.web.blog.util.BeanHandler;
 import com.scs.web.blog.util.DbUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +12,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -75,7 +75,7 @@ public class UserDaoImpl implements UserDao {
         PreparedStatement pst = connection.prepareStatement(sql);
         pst.setString(1, mobile);
         ResultSet rs = pst.executeQuery();
-        User user = convert(rs).get(0);
+        User user = BeanHandler.convertUser(rs).get(0);
         DbUtil.close(connection, pst, rs);
         return user;
     }
@@ -86,7 +86,7 @@ public class UserDaoImpl implements UserDao {
         String sql = "SELECT * FROM t_user ORDER BY fans DESC LIMIT 10 ";
         PreparedStatement pst = connection.prepareStatement(sql);
         ResultSet rs = pst.executeQuery();
-        List<User> userList = convert(rs);
+        List<User> userList = BeanHandler.convertUser(rs);
         DbUtil.close(connection, pst, rs);
         return userList;
     }
@@ -99,14 +99,23 @@ public class UserDaoImpl implements UserDao {
         pst.setInt(1, (currentPage - 1) * count);
         pst.setInt(2, count);
         ResultSet rs = pst.executeQuery();
-        List<User> userList = convert(rs);
+        List<User> userList = BeanHandler.convertUser(rs);
         DbUtil.close(connection, pst, rs);
         return userList;
     }
 
     @Override
     public UserVo getUser(long id) throws SQLException {
-        return null;
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT * FROM t_user WHERE id = ? ";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setLong(1, id);
+        ResultSet rs = pst.executeQuery();
+        UserVo userVo = new UserVo();
+        User user = BeanHandler.convertUser(rs).get(0);
+        userVo.setUser(user);
+        DbUtil.close(connection, pst, rs);
+        return userVo;
     }
 
     @Override
@@ -118,38 +127,8 @@ public class UserDaoImpl implements UserDao {
         pst.setString(1, "%" + keywords + "%");
         pst.setString(2, "%" + keywords + "%");
         ResultSet rs = pst.executeQuery();
-        List<User> userList = convert(rs);
+        List<User> userList = BeanHandler.convertUser(rs);
         DbUtil.close(connection, pst, rs);
-        return userList;
-    }
-
-    private List<User> convert(ResultSet rs) {
-        List<User> userList = new ArrayList<>();
-        try {
-            while (rs.next()) {
-                User user = new User();
-                user.setId(rs.getLong("id"));
-                user.setMobile(rs.getString("mobile"));
-                user.setPassword(rs.getString("password"));
-                user.setNickname(rs.getString("nickname"));
-                user.setAvatar(rs.getString("avatar"));
-                user.setGender(rs.getString("gender"));
-                user.setBirthday(rs.getDate("birthday").toLocalDate());
-                user.setIntroduction(rs.getString("introduction"));
-                user.setHomepage(rs.getString("homepage"));
-                user.setBanner(rs.getString("banner"));
-                user.setEmail(rs.getString("email"));
-                user.setAddress(rs.getString("address"));
-                user.setFollows(rs.getInt("follows"));
-                user.setFans(rs.getInt("fans"));
-                user.setArticles(rs.getInt("articles"));
-                user.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
-                user.setStatus(rs.getShort("status"));
-                userList.add(user);
-            }
-        } catch (SQLException e) {
-            logger.error("用户数据结果集解析产生异常");
-        }
         return userList;
     }
 }

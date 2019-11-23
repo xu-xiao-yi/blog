@@ -18,7 +18,7 @@ public class SessionListener implements HttpSessionListener {
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
         HttpSession session = httpSessionEvent.getSession();
         myc.addSession(session);
-//        System.out.println("新的session创建：" + session.getId());
+        System.out.println("新的session创建：" + session.getId());
     }
 
     @Override

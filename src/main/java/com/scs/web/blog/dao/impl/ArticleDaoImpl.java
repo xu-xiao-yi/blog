@@ -3,6 +3,7 @@ package com.scs.web.blog.dao.impl;
 import com.scs.web.blog.dao.ArticleDao;
 import com.scs.web.blog.domain.vo.ArticleVo;
 import com.scs.web.blog.entity.Article;
+import com.scs.web.blog.util.BeanHandler;
 import com.scs.web.blog.util.DbUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +12,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -67,7 +67,7 @@ public class ArticleDaoImpl implements ArticleDao {
         PreparedStatement pst = connection.prepareStatement(sql);
         ResultSet rs = pst.executeQuery();
         //调用封装的方法，将结果集解析成List
-        List<ArticleVo> articleVoList = convert(rs);
+        List<ArticleVo> articleVoList = BeanHandler.convertArticle(rs);
         DbUtil.close(connection, pst, rs);
         return articleVoList;
     }
@@ -85,7 +85,7 @@ public class ArticleDaoImpl implements ArticleDao {
         pst.setInt(1, (currentPage - 1) * count);
         pst.setInt(2, count);
         ResultSet rs = pst.executeQuery();
-        List<ArticleVo> articleVos = convert(rs);
+        List<ArticleVo> articleVos = BeanHandler.convertArticle(rs);
         DbUtil.close(connection, pst, rs);
         return articleVos;
     }
@@ -106,7 +106,7 @@ public class ArticleDaoImpl implements ArticleDao {
         pst.setString(1, "%" + keywords + "%");
         pst.setString(2, "%" + keywords + "%");
         ResultSet rs = pst.executeQuery();
-        List<ArticleVo> articleVos = convert(rs);
+        List<ArticleVo> articleVos = BeanHandler.convertArticle(rs);
         DbUtil.close(connection, pst, rs);
         return articleVos;
     }
@@ -125,7 +125,26 @@ public class ArticleDaoImpl implements ArticleDao {
         PreparedStatement pst = connection.prepareStatement(sql);
         pst.setLong(1, topicId);
         ResultSet rs = pst.executeQuery();
-        List<ArticleVo> articleVos = convert(rs);
+        List<ArticleVo> articleVos = BeanHandler.convertArticle(rs);
+        DbUtil.close(connection, pst, rs);
+        return articleVos;
+    }
+
+    @Override
+    public List<ArticleVo> selectByUserId(long userId) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        //从文章、专题、用户表联查出前端需要展示的数据
+        String sql = "SELECT a.*,b.topic_name,b.logo,c.nickname,c.avatar " +
+                "FROM t_article a " +
+                "LEFT JOIN t_topic b " +
+                "ON a.topic_id = b.id " +
+                "LEFT JOIN t_user c " +
+                "ON a.user_id = c.id " +
+                "WHERE a.topic_id = ? ";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setLong(1, userId);
+        ResultSet rs = pst.executeQuery();
+        List<ArticleVo> articleVos = BeanHandler.convertArticle(rs);
         DbUtil.close(connection, pst, rs);
         return articleVos;
     }
@@ -143,36 +162,12 @@ public class ArticleDaoImpl implements ArticleDao {
         PreparedStatement pst = connection.prepareStatement(sql);
         pst.setLong(1, id);
         ResultSet rs = pst.executeQuery();
-        ArticleVo articleVo = convert(rs).get(0);
+        ArticleVo articleVo = BeanHandler.convertArticle(rs).get(0);
+        //注意这里，上一步执行完毕后，结果集的指针已经在当前这行记录的下方，所以回退一下
         rs.previous();
-        articleVo.setContent(rs.getString("content"));
+        //列表页的文章数据一般不需要详细内容，但是文章详情页需要，所以补上content属性
+        articleVo.getArticle().setContent(rs.getString("content"));
         DbUtil.close(connection, pst, rs);
         return articleVo;
-    }
-
-    private List<ArticleVo> convert(ResultSet rs) {
-        List<ArticleVo> articleVoList = new ArrayList<>();
-        try {
-            while (rs.next()) {
-                ArticleVo articleVo = new ArticleVo();
-                articleVo.setId(rs.getLong("id"));
-                articleVo.setUserId(rs.getLong("user_id"));
-                articleVo.setTopicId(rs.getLong("topic_id"));
-                articleVo.setTitle(rs.getString("title"));
-                articleVo.setThumbnail(rs.getString("thumbnail"));
-                articleVo.setSummary(rs.getString("summary"));
-                articleVo.setLikes(rs.getInt("likes"));
-                articleVo.setComments(rs.getInt("comments"));
-                articleVo.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
-                articleVo.setNickname(rs.getString("nickname"));
-                articleVo.setAvatar(rs.getString("avatar"));
-                articleVo.setTopicName(rs.getString("topic_name"));
-                articleVo.setLogo(rs.getString("logo"));
-                articleVoList.add(articleVo);
-            }
-        } catch (SQLException e) {
-            logger.error("文章数据结果集解析异常");
-        }
-        return articleVoList;
     }
 }

@@ -1,39 +1,22 @@
 package com.scs.web.blog.domain.vo;
 
-import com.scs.web.blog.domain.dto.SimpleUser;
-import com.scs.web.blog.entity.Article;
+import com.scs.web.blog.entity.Topic;
+import com.scs.web.blog.entity.User;
 import lombok.Data;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
  * @author mq_xu
  * @ClassName UserVo
- * @Description 用户视图类，包括用户自身信息、发表的所有文章、所有粉丝和关注的人
+ * @Description 用户视图类，包括用户自身信息、发表的所有文章、关注的所有专题、所有的粉丝
  * @Date 2019/11/16
  * @Version 1.0
  **/
 @Data
 public class UserVo {
-    private Long id;
-    private String mobile;
-    private String password;
-    private String nickname;
-    private String avatar;
-    private String gender;
-    private LocalDate birthday;
-    private String address;
-    private String introduction;
-    private String banner;
-    private String email;
-    private String homepage;
-    private Integer follows;
-    private Integer fans;
-    private Integer articles;
-    private LocalDateTime createTime;
-    private Short status;
-    private List<Article> articleList;
-    private List<SimpleUser> simpleUserList;
+    private User user;
+    private List<ArticleVo> articleList;
+    private List<Topic> topicList;
+    private List<User> fansList;
 }

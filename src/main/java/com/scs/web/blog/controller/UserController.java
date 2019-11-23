@@ -79,7 +79,11 @@ public class UserController extends HttpServlet {
         String info = req.getPathInfo().trim();
         //取得路径参数
         String id = info.substring(info.indexOf("/") + 1);
-        resp.getWriter().println(id);
+        Gson gson = new GsonBuilder().create();
+        Result result = userService.getUser(Long.parseLong(id));
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(result));
+        out.close();
     }
 
     @Override
@@ -104,12 +108,15 @@ public class UserController extends HttpServlet {
         logger.info("登录用户信息：" + stringBuilder.toString());
         Gson gson = new GsonBuilder().create();
         UserDto userDto = gson.fromJson(stringBuilder.toString(), UserDto.class);
-        String inputCode = userDto.getCode();
-        String sessionId = req.getParameter("token");
-        System.out.println(sessionId);
+        String inputCode = userDto.getCode().trim();
+
+        //取得客户端请求头里带来的token
+        String sessionId = req.getHeader("Access-Token");
+        System.out.println("客户端传来的JSESSIONID：" + sessionId);
         MySessionContext myc = MySessionContext.getInstance();
         HttpSession session = myc.getSession(sessionId);
         String correctCode = session.getAttribute("code").toString();
+        System.out.println("正确的验证码：" + correctCode);
         PrintWriter out = resp.getWriter();
         if (inputCode.equalsIgnoreCase(correctCode)) {
             Result result = userService.signIn(userDto);

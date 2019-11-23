@@ -1,31 +1,22 @@
 package com.scs.web.blog.domain.vo;
 
-import com.scs.web.blog.domain.dto.SimpleUser;
+import com.scs.web.blog.entity.Topic;
+import com.scs.web.blog.entity.User;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
  * @author mq_xu
  * @ClassName TopicVo
- * @Description 专题视图类, 包含专题自身信息、专题下所有文章、创建者信息(简略)、关注者信息(简略)
+ * @Description 专题视图类, 包含专题自身信息、管理员信息、专题下所有文章、关注者列表
  * @Date 2019/11/16
  * @Version 1.0
  **/
 @Data
 public class TopicVo {
-    private Long id;
-    private Long adminId;
-    private String topicName;
-    private String logo;
-    private String description;
-    private String homepage;
-    private Integer articles;
-    private Integer follows;
-    private LocalDateTime createTime;
+    private Topic topic;
+    private User admin;
     private List<ArticleVo> articleList;
-    private String nickname;
-    private String avatar;
-    private List<SimpleUser> simpleUsers;
+    private List<User> followList;
 }
