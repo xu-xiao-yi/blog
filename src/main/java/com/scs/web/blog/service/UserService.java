@@ -27,6 +27,8 @@ public interface UserService {
 
     /**
      * 获取分页用户信息
+     * @param currentPage
+     * @param count
      * @return
      */
     Result selectByPage(int currentPage,int count);

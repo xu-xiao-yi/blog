@@ -18,19 +18,17 @@ public interface UserDao {
      * 新增用户
      *
      * @param user
-     * @return
      * @throws SQLException
      */
-    int insert(User user) throws SQLException;
+    void insert(User user) throws SQLException;
 
     /**
      * 批量新增用户
      *
-     * @param studentList
-     * @return int[]
+     * @param userList
      * @throws SQLException
      */
-    int[] batchInsert(List<User> userList) throws SQLException;
+    void batchInsert(List<User> userList) throws SQLException;
 
     /**
      * 根据手机号查找用户
@@ -60,7 +58,7 @@ public interface UserDao {
 
     /**
      * 根据id查询用户详情，包括其他数据
-     *
+     * @param  id
      * @return
      * @throws SQLException
      */

@@ -25,7 +25,7 @@ public class ArticleDaoTest {
 
     @Test
     public void getArticle() throws SQLException {
-        ArticleVo article = articleDao.getArticle(11);
+        ArticleVo article = articleDao.getArticle(1);
         System.out.println(article);
     }
 

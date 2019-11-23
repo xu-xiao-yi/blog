@@ -21,7 +21,15 @@ public interface TopicDao {
      * @return
      * @throws SQLException
      */
-    int[] batchInsert(List<Topic> topicList) throws SQLException;
+    void batchInsert(List<Topic> topicList) throws SQLException;
+
+    /**
+     * 获取所有专题
+     * @return
+     * @throws SQLException
+     */
+    List<Topic> selectAll() throws SQLException;
+
 
     /**
      * 获取热门专题

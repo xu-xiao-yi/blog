@@ -20,7 +20,8 @@ public interface ArticleService {
     /**
      * 获取分页文章
      *
-     * @param currentPage,pageCount
+     * @param currentPage
+     * @param count
      * @return
      */
     Result getArticlesByPage(int currentPage, int count);

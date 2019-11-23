@@ -25,10 +25,10 @@ public class TopicDaoImpl implements TopicDao {
     private static Logger logger = LoggerFactory.getLogger(TopicDaoImpl.class);
 
     @Override
-    public int[] batchInsert(List<Topic> topicList) throws SQLException {
+    public void batchInsert(List<Topic> topicList) throws SQLException {
         Connection connection = DbUtil.getConnection();
         connection.setAutoCommit(false);
-        String sql = "INSERT INTO t_topic (admin_id,topic_name,logo,description,articles,follows,create_time) VALUES (?,?,?,?,?,?,?) ";
+        String sql = "INSERT INTO t_topic (admin_id,topic_name,logo,description,homepage,articles,follows,create_time) VALUES (?,?,?,?,?,?,?,?) ";
         PreparedStatement pst = connection.prepareStatement(sql);
         topicList.forEach(topic -> {
             try {
@@ -36,24 +36,35 @@ public class TopicDaoImpl implements TopicDao {
                 pst.setString(2, topic.getTopicName());
                 pst.setString(3, topic.getLogo());
                 pst.setString(4, topic.getDescription());
-                pst.setInt(5, topic.getArticles());
-                pst.setInt(6, topic.getFollows());
-                pst.setObject(7, topic.getCreateTime());
+                pst.setString(5, topic.getHomepage());
+                pst.setInt(6, topic.getArticles());
+                pst.setInt(7, topic.getFollows());
+                pst.setObject(8, topic.getCreateTime());
                 pst.addBatch();
             } catch (SQLException e) {
                 logger.error("批量加入专题数据产生异常");
             }
         });
-        int[] result = pst.executeBatch();
+        pst.executeBatch();
         connection.commit();
         DbUtil.close(connection, pst);
-        return result;
+    }
+
+    @Override
+    public List<Topic> selectAll() throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT * FROM t_topic ORDER BY id ";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+        List<Topic> topicList = convert(rs);
+        DbUtil.close(connection, pst, rs);
+        return topicList;
     }
 
     @Override
     public List<Topic> selectHotTopics() throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "SELECT * FROM t_topic ORDER BY follows DESC LIMIT 10 ";
+        String sql = "SELECT * FROM t_topic ORDER BY follows DESC LIMIT 8 ";
         PreparedStatement pst = connection.prepareStatement(sql);
         ResultSet rs = pst.executeQuery();
         List<Topic> topicList = convert(rs);
@@ -64,8 +75,7 @@ public class TopicDaoImpl implements TopicDao {
     @Override
     public List<Topic> selectByPage(int currentPage, int count) throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "SELECT * FROM t_topic " +
-                "ORDER BY id  LIMIT ?,? ";
+        String sql = "SELECT * FROM t_topic  ORDER BY id LIMIT ?,? ";
         PreparedStatement pst = connection.prepareStatement(sql);
         pst.setInt(1, (currentPage - 1) * count);
         pst.setInt(2, count);
@@ -78,6 +88,7 @@ public class TopicDaoImpl implements TopicDao {
     @Override
     public TopicVo getTopic(long id) throws SQLException {
         Connection connection = DbUtil.getConnection();
+        //查询专题详情，包括专题表信息，文章列表，创建者基础信息，关注人列表
         String sql = "SELECT a.*,b.nickname,b.avatar " +
                 "FROM t_topic a " +
                 "LEFT JOIN t_user b " +
@@ -91,9 +102,12 @@ public class TopicDaoImpl implements TopicDao {
             topicVo = new TopicVo();
             topicVo.setId(rs.getLong("id"));
             topicVo.setAdminId(rs.getLong("admin_id"));
+            topicVo.setNickname(rs.getString("nickname"));
+            topicVo.setAvatar(rs.getString("avatar"));
             topicVo.setTopicName(rs.getString("topic_name"));
             topicVo.setLogo(rs.getString("logo"));
             topicVo.setDescription(rs.getString("description"));
+            topicVo.setHomepage(rs.getString("homepage"));
             topicVo.setArticles(rs.getInt("articles"));
             topicVo.setFollows(rs.getInt("follows"));
             topicVo.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
@@ -117,7 +131,7 @@ public class TopicDaoImpl implements TopicDao {
     }
 
     private List<Topic> convert(ResultSet rs) {
-        List<Topic> topicList = new ArrayList<>(100);
+        List<Topic> topicList = new ArrayList<>();
         try {
             while (rs.next()) {
                 Topic topic = new Topic();
@@ -126,6 +140,7 @@ public class TopicDaoImpl implements TopicDao {
                 topic.setTopicName(rs.getString("topic_name"));
                 topic.setLogo(rs.getString("logo"));
                 topic.setDescription(rs.getString("description"));
+                topic.setHomepage(rs.getString("homepage"));
                 topic.setArticles(rs.getInt("articles"));
                 topic.setFollows(rs.getInt("follows"));
                 topic.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());

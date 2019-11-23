@@ -30,9 +30,9 @@ public class User {
     private String banner;
     private String email;
     private String homepage;
-    private Short follows;
-    private Short fans;
-    private Short articles;
+    private Integer follows;
+    private Integer fans;
+    private Integer articles;
     private LocalDateTime createTime;
     private Short status;
 }

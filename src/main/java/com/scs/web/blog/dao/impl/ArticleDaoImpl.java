@@ -25,7 +25,7 @@ public class ArticleDaoImpl implements ArticleDao {
     private static Logger logger = LoggerFactory.getLogger(ArticleDaoImpl.class);
 
     @Override
-    public int[] batchInsert(List<Article> articleList) throws SQLException {
+    public void batchInsert(List<Article> articleList) throws SQLException {
         Connection connection = DbUtil.getConnection();
         connection.setAutoCommit(false);
         String sql = "INSERT INTO t_article (user_id,topic_id,title,summary,thumbnail,content,likes,comments,create_time) VALUES (?,?,?,?,?,?,?,?,?) ";
@@ -45,12 +45,10 @@ public class ArticleDaoImpl implements ArticleDao {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
         });
-        int[] result = pst.executeBatch();
+        pst.executeBatch();
         connection.commit();
         DbUtil.close(connection, pst);
-        return result;
     }
 
     @Override
@@ -82,8 +80,7 @@ public class ArticleDaoImpl implements ArticleDao {
                 "LEFT JOIN t_topic b " +
                 "ON a.topic_id = b.id " +
                 "LEFT JOIN t_user c " +
-                "ON a.user_id = c.id " +
-                "ORDER BY a.id  LIMIT ?,? ";
+                "ON a.user_id = c.id  LIMIT ?,? ";
         PreparedStatement pst = connection.prepareStatement(sql);
         pst.setInt(1, (currentPage - 1) * count);
         pst.setInt(2, count);

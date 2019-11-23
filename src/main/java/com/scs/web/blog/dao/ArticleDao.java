@@ -21,7 +21,7 @@ public interface ArticleDao {
      * @return
      * @throws SQLException
      */
-    int[] batchInsert(List<Article> articleList) throws SQLException;
+    void batchInsert(List<Article> articleList) throws SQLException;
 
     /**
      * 查询热门文章，返回视图集合
@@ -35,7 +35,7 @@ public interface ArticleDao {
      * 分页获得文章数据
      *
      * @param currentPage
-     * @param pageCount
+     * @param count
      * @return
      * @throws SQLException
      */
@@ -54,6 +54,7 @@ public interface ArticleDao {
 
     /**
      * 根据专题id查询所有文章
+     *
      * @param topicId
      * @return
      * @throws SQLException

@@ -43,10 +43,6 @@ public class TopicServiceImpl implements TopicService {
         }
     }
 
-    @Override
-    public Result getPageTopics(int currentPage, int pageCount) {
-        return null;
-    }
 
     @Override
     public Result getTopic(long id) {

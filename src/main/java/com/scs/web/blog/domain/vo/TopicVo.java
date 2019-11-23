@@ -20,10 +20,12 @@ public class TopicVo {
     private String topicName;
     private String logo;
     private String description;
+    private String homepage;
     private Integer articles;
     private Integer follows;
     private LocalDateTime createTime;
     private List<ArticleVo> articleList;
-    private SimpleUser simpleUser;
+    private String nickname;
+    private String avatar;
     private List<SimpleUser> simpleUsers;
 }

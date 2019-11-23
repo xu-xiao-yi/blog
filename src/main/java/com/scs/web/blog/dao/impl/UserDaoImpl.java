@@ -25,7 +25,7 @@ public class UserDaoImpl implements UserDao {
     private static Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
 
     @Override
-    public int insert(User user) throws SQLException {
+    public void insert(User user) throws SQLException {
         Connection connection = DbUtil.getConnection();
         String sql = "INSERT INTO t_user (mobile,password) VALUES (?,?) ";
         PreparedStatement pst = connection.prepareStatement(sql);
@@ -33,14 +33,13 @@ public class UserDaoImpl implements UserDao {
         pst.setString(2, user.getPassword());
         int n = pst.executeUpdate();
         DbUtil.close(connection, pst);
-        return n;
     }
 
     @Override
-    public int[] batchInsert(List<User> userList) throws SQLException {
+    public void batchInsert(List<User> userList) throws SQLException {
         Connection connection = DbUtil.getConnection();
         connection.setAutoCommit(false);
-        String sql = "INSERT INTO t_user (mobile,password,nickname,avatar,gender,birthday,address,introduction,create_time) VALUES (?,?,?,?,?,?,?,?,?) ";
+        String sql = "INSERT INTO t_user (id,mobile,password,nickname,avatar,gender,birthday,address,introduction,banner,homepage,follows,fans,articles,create_time,status) VALUES (null,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
         PreparedStatement pst = connection.prepareStatement(sql);
         userList.forEach(user -> {
             try {
@@ -52,15 +51,21 @@ public class UserDaoImpl implements UserDao {
                 pst.setObject(6, user.getBirthday());
                 pst.setString(7, user.getAddress());
                 pst.setString(8, user.getIntroduction());
-                pst.setObject(9, user.getCreateTime());
+                pst.setString(9, user.getBanner());
+                pst.setString(10, user.getHomepage());
+                pst.setInt(11, 0);
+                pst.setInt(12, 0);
+                pst.setInt(13, 0);
+                pst.setObject(14, user.getCreateTime());
+                pst.setShort(15, user.getStatus());
                 pst.addBatch();
             } catch (SQLException e) {
                 logger.error("批量加入用户数据产生异常");
             }
         });
-        int[] result = pst.executeBatch();
+        pst.executeBatch();
+        connection.commit();
         DbUtil.close(connection, pst);
-        return result;
     }
 
     @Override
@@ -89,8 +94,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> selectByPage(int currentPage, int count) throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "SELECT * FROM t_user " +
-                "ORDER BY id  LIMIT ?,? ";
+        String sql = "SELECT * FROM t_user LIMIT ?,? ";
         PreparedStatement pst = connection.prepareStatement(sql);
         pst.setInt(1, (currentPage - 1) * count);
         pst.setInt(2, count);
@@ -120,7 +124,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     private List<User> convert(ResultSet rs) {
-        List<User> userList = new ArrayList<>(50);
+        List<User> userList = new ArrayList<>();
         try {
             while (rs.next()) {
                 User user = new User();
@@ -136,9 +140,9 @@ public class UserDaoImpl implements UserDao {
                 user.setBanner(rs.getString("banner"));
                 user.setEmail(rs.getString("email"));
                 user.setAddress(rs.getString("address"));
-                user.setFollows(rs.getShort("follows"));
-                user.setFans(rs.getShort("fans"));
-                user.setArticles(rs.getShort("articles"));
+                user.setFollows(rs.getInt("follows"));
+                user.setFans(rs.getInt("fans"));
+                user.setArticles(rs.getInt("articles"));
                 user.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
                 user.setStatus(rs.getShort("status"));
                 userList.add(user);
