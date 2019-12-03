@@ -6,81 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7ef6ba93-9fb2-45f7-ba50-4e769c2c48ac" name="Default Changelist" comment="blog项目，完成如下内容：&#10;1.导航栏全局搜索，根据关键字可以进行专题、文章、用户分类按关键字检索，&#10;2.文章、专题、作者页面的分页">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/xmqblog1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/html/coursel.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/blog.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/xmqblog.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/META-INF/blog.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/controller/ArticleController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/controller/CodeController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/controller/LoginController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/controller/MySqlServlet.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/controller/TopicController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/controller/UploadController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/controller/UserController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/dao/ArticleDao.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/dao/RegionDao.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/dao/TopicDao.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/dao/UserDao.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/dao/impl/ArticleDaoImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/dao/impl/RegionDaoImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/dao/impl/TopicDaoImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/dao/impl/UserDaoImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/domain/dto/Address.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/domain/dto/City.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/domain/dto/Province.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/domain/dto/ProvinceList.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/domain/dto/SimpleTopic.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/domain/dto/SimpleUser.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/domain/dto/UserDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/domain/vo/ArticleVo.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/domain/vo/TopicVo.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/domain/vo/UserVo.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/entity/Article.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/entity/Region.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/entity/Topic.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/entity/User.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/factory/DaoFactory.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/factory/ServiceFactory.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/filter/CharacterFilter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/filter/CorsFilter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/listener/MySessionContext.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/listener/SessionListener.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/service/ArticleService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/service/TopicService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/service/UserService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/service/impl/ArticleServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/service/impl/TopicServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/service/impl/UserServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/util/BeanHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/util/DataUtil.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/util/DbUtil.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/util/ImageUtil.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/util/JSoupSpider.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/util/Result.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/util/ResultCode.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/com/scs/web/blog/util/StringUtil.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/classes/db-config.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/lib/commons-codec-1.12.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/lib/gson-2.8.5.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/lib/jsoup-1.12.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/lib/logback-classic-1.1.6.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/lib/logback-core-1.1.6.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/lib/mysql-connector-java-5.1.48.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/lib/slf4j-api-1.7.22.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/WEB-INF/web.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/code.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/login.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/blog/upload.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/blog.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/scs/web/blog/domain/dto/Address.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/scs/web/blog/domain/dto/City.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/scs/web/blog/domain/dto/Province.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/scs/web/blog/domain/dto/ProvinceList.class" beforeDir="false" />
-    </list>
+    <list default="true" id="7ef6ba93-9fb2-45f7-ba50-4e769c2c48ac" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -394,7 +320,7 @@
       <workItem from="1574385983494" duration="28399000" />
       <workItem from="1574469314689" duration="35509000" />
       <workItem from="1574845483863" duration="5180000" />
-      <workItem from="1575271739642" duration="4694000" />
+      <workItem from="1575271739642" duration="4955000" />
     </task>
     <task id="LOCAL-00001" summary="blog项目，完成用户数据初始化和登录功能测试">
       <created>1573274056873</created>
@@ -466,7 +392,14 @@
       <option name="project" value="LOCAL" />
       <updated>1574502596753</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="blog项目12-3&#10;新增网页">
+      <created>1575363229961</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1575363229962</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -499,6 +432,7 @@
     <MESSAGE value="blog项目，完成文章模糊搜索接口、文章分页接口" />
     <MESSAGE value="blog项目，完成如下内容：&#10;1.导航栏全局搜索，根据关键字可以进行专题、文章、用户分类按关键字检索，&#10;2.文章、专题、作者页面的分页" />
     <MESSAGE value="blog项目，全局搜索、分页优化、专题详情和文章详情" />
-    <option name="LAST_COMMIT_MESSAGE" value="blog项目，全局搜索、分页优化、专题详情和文章详情" />
+    <MESSAGE value="blog项目12-3&#10;新增网页" />
+    <option name="LAST_COMMIT_MESSAGE" value="blog项目12-3&#10;新增网页" />
   </component>
 </project>
