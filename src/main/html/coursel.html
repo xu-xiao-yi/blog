@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <meta charset="utf-8" />
+    <title>慕课</title>
+</head>
+<style type="text/css">
+
+    *{
+        margin: 0;
+        padding: 0;
+
+    }
+    header{
+        height: 60px;
+        background-color: rgb(211, 194, 148);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .nav{
+        flex: 0 0 50px;
+        list-style: none;
+        display: flex;
+    }
+    .nav li{
+        margin-left: 10px;
+        margin-right: 10px;
+        width: 50px;
+    }
+    .user-info{
+        padding-right: 10px;
+    }
+    /*超链接样式*/
+    .nav li a{
+        text-decoration: none;
+        color: rgb(249, 251, 231);
+    }
+    .nav li a:hover{
+        color: #FFFFFF;
+    }
+    /*搜索区样式*/
+    .search-wrap{
+        height: 50px;
+        display: flex;
+        align-items: center;
+        padding-left: 10%;
+        margin-bottom: 10px;
+
+    }
+    .input-box{
+        width: 300px;
+        height: 30px;
+        border: 1px solid #EEEEEE;
+        border-radius: 5px;
+        margin-left: 10px;
+    }
+    .carousel-wrap {
+        position: relative;
+        width: 80%;
+        height: 300px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        margin:auto;
+    }
+
+    .slide-ul {
+        width: 100%;
+        height: 100%;
+    }
+
+    .slide-ul li {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .slide-ul li img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .carousel-items {
+        z-index: 100;
+        position: relative;
+        top: -80px;
+        text-align: center;
+        font-size: 0;
+    }
+
+    .carousel-items span {
+        display: inline-block;
+        width: 50px;
+        height: 6px;
+        margin: 0 5px;
+        background-color: #eee;
+        cursor: pointer;
+    }
+
+    .carousel-items .active {
+        background-color: #FFA500;
+    }
+    /* Tooltip 容器 */
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        border-bottom: 1px dotted black; /* 悬停元素上显示点线 */
+        position: relative;
+        left: 130px;
+        top: -300px;
+
+    }
+
+    /* Tooltip 文本 */
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 120px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        padding: 5px 0;
+        border-radius: 6px;
+
+        /* 定位 */
+        position: absolute;
+        z-index: 1;
+    }
+
+    /* 鼠标移动上去后显示提示框 */
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        width: 700px;
+        height: 300px;
+    }
+    .tooltip .tooltiptext {
+        top: -5px;
+        left: 105%;
+    }
+    .container{
+        width:90%;
+        margin:auto;
+    }
+    .row{
+        display:flex;
+        margin-bottom:10px;
+    }
+    .column{
+        margin-right: 15px;
+        border:1px  solid  #CCCCCC;
+        border-radius: 5%;
+        height:100px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+    .column-4{
+        flex:1 1 23%;       /*设置column框的固定大小为23% */
+    }
+    .column-3{
+        flex:1 1 45%;
+    }
+</style>
+<body>
+<!--顶部导航-->
+<header>
+    <div>
+        <!--导航-->
+        <ul class="nav">
+            <li>
+                <a href="#">免费课程</a>
+            </li>
+            <li>
+                <a href="#">实战课程</a>
+            </li>
+            <li>
+                <a href="#">就业班</a>
+            </li>
+            <li>
+                <a href="#">专栏</a>
+            </li>
+            <li>
+                <a href="#">猿问</a>
+            </li>
+            <li>
+                <a href="#">手记</a>
+            </li>
+            <div class="search-wrap">
+                <input type="text" placeholder="输入要搜索的内容"class="input-box" />
+                <br>
+                <button type="button" class="white-btn" >
+                    搜索
+                    <i class="iconfont">&#xe61b;</i>
+            </div>
+        </ul>
+    </div>
+    <div class="nav">
+        <li>
+            <h3>登录</h3>
+        </li>
+        <li>
+            <h3>注册</h3>
+        </li>
+    </div>
+</header>
+<div id="app">
+    <div class="carousel-wrap">
+        <transition-group tag="ul" class="slide-ul" name="slide">
+            <li v-for="(item,index) in slideList"
+                :key="index"
+                v-show="index===currentIndex"
+                @mouseenter="stop"
+                @mouseleave="go">
+                <a :href="item.url">
+                    <img :src="item.image" :alt="item.description">
+                </a>
+            </li>
+        </transition-group>
+        <div class="carousel-items">
+            <span v-for="(item,index) in slideList" :class="{active:index===currentIndex}" @mouseover="change(index)"></span>
+        </div>
+    </div>
+</div>
+<div class="tooltip">前言/区块链/人工智能
+    <span class="tooltiptext">前言技术</span>
+</div>
+<div class="container">
+    <div>
+        <p><h3>就业班</h3></p>
+    </div>
+    <div class="row ">
+        <div class="column column-4">
+            <img  width="300" height="100" src="img/t1.jpg">
+        </div>
+        <div class="column column-4">
+            <img width="300" height="100" src="img/t1.jpg">
+        </div>
+        <div class="column column-4">
+            <img width="300" height="100" src="img/t1.jpg">
+        </div>
+        <div class="column column-4">
+            <img width="300" height="100" src="img/t1.jpg">
+        </div>
+    </div>
+    <div class="container">
+        <div>
+            <p><h3>敬业班</h3></p>
+        </div>
+        <div class="row ">
+            <div class="column column-3">
+                <img  width="300" height="100" src="img/t2.jpg">
+            </div>
+            <div class="column column-3">
+                <img width="300" height="100" src="img/t2.jpg">
+            </div>
+        </div >
+        <div class="container">
+            <div>
+                <p><h3>新上好课</h3></p>
+            </div>
+            <div class="row1">
+                <div class="column column-2">
+                    <img  width="300" height="100" src="img/t2.jpg">
+                </div>
+                <div class="column column-2">
+                    <img width="300" height="100" src="img/t2.jpg">
+                </div>
+            </div>
+            <script type="text/javascript">
+                var app = new Vue({
+                    el: '#app',
+                    data: {
+                        slideList: [
+                            {
+                                "url": "#",
+                                "description": "one",
+                                "image": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1572344959446&di=79d86153774bef912cea58347c615201&imgtype=0&src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2Fa%2F58a170b57db57.jpg"
+                            },
+                            {
+                                "url": "#",
+                                "description": "two",
+                                "image": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1572344959443&di=fb62c10102e925f6785b3b90ae5490a9&imgtype=0&src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2F8%2F59b38f7e912cd.jpg"
+                            },
+                            {
+                                "url": "#",
+                                "description": "three",
+                                "image": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1572344959442&di=2f335b59835ad5d90a953fbf77a8b15c&imgtype=0&src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2F4%2F544dff09dbf8c.jpg"
+                            }
+                        ],
+                        currentIndex: 0,
+                        timer: null
+                    },
+                    created: function() {
+                        this.$nextTick(() => {
+                            this.timer = setInterval(() => {this.autoPlay()}, 3000)
+                        })
+                    },
+                    methods: {
+                        go() {
+                            this.timer = setInterval(() => {
+                                this.autoPlay()
+                            }, 3000)
+                        },
+                        stop() {
+                            clearInterval(this.timer)
+                            this.timer = null
+                        },
+                        change(index) {
+                            this.currentIndex = index
+                        },
+                        autoPlay() {
+                            this.currentIndex++
+                            if (this.currentIndex > this.slideList.length - 1) {
+                                this.currentIndex = 0
+                            }
+                        }
+                    }
+                })
+            </script>
+</body>
+</html>
